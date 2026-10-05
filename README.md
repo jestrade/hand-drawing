@@ -1,141 +1,150 @@
 # ✨ AR Magic Draw
 
-Dibuja en el aire con las manos. La cámara detecta los 21 puntos de cada mano
-con MediaPipe y cada yema deja un trazo de neón que se desvanece solo.
+Draw in the air with your hands. The camera tracks the 21 landmarks of each
+hand with MediaPipe, and every fingertip leaves a neon trail that fades away on
+its own.
 
-Todo cabe en un único archivo (`index.html`): sin build, sin dependencias que
-instalar, sin backend. El vídeo nunca sale del navegador.
+![AR Magic Draw: neon trails drawn by each fingertip of an open hand](docs/demo.webp)
+
+Everything lives in a single file (`index.html`): no build step, no
+dependencies to install, no backend. The video never leaves your browser.
 
 ---
 
-## Cómo ejecutarlo
+## Running it
 
-La cámara exige un contexto seguro, así que **no basta con abrir el archivo**
-haciendo doble clic (`file://`). Sirve la carpeta por HTTP:
+The camera requires a secure context, so **opening the file by double-clicking
+it (`file://`) won't work**. Serve the folder over HTTP:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Y abre <http://localhost:8000>.
+Then open <http://localhost:8000>.
 
-También vale cualquier alternativa (`npx serve`, `php -S localhost:8000`, la
-extensión Live Server de VS Code…) o publicarlo en cualquier hosting estático
-con HTTPS.
+Any alternative works too (`npx serve`, `php -S localhost:8000`, the VS Code
+Live Server extension…), as does any static host with HTTPS.
 
-**Requisitos:** un navegador moderno con WebGL y `getUserMedia` (Chrome, Edge,
-Safari o Firefox actualizados) y una cámara. La primera carga descarga el
-modelo de detección (~8 MB) desde el CDN, así que necesita internet.
+**Requirements:** a modern browser with WebGL and `getUserMedia` (an
+up-to-date Chrome, Edge, Safari or Firefox) and a camera. The first load
+downloads the detection model (~8 MB) from the CDN, so it needs an internet
+connection.
 
 ---
 
-## Cómo se dibuja
+## How to draw
 
-Muestra la mano abierta frente a la cámara. Hay tres modos, en la barra
-superior:
+Hold your open hand in front of the camera. There are three modes in the top
+bar:
 
-| Modo | Qué hace |
+| Mode | What it does |
 | --- | --- |
-| **5 Dedos** | Cada dedo **estirado** pinta con su propio color. Dobla un dedo y ese trazo se levanta. |
-| **Índice** | Solo pinta el índice. Más limpio para escribir. |
-| **Pellizco** | Pinta solo mientras juntas el pulgar y el índice, desde el punto medio entre ambos. |
+| **5 Fingers** | Every **extended** finger paints in its own color. Bend a finger and its stroke lifts. |
+| **Index** | Only the index finger paints. Cleaner for writing. |
+| **Pinch** | Paints only while you pinch thumb and index together, from the midpoint between them. |
 
-**Cierra el puño** durante un instante para borrar el lienzo.
+**Make a fist** for a moment to clear the canvas.
 
-Detecta hasta **dos manos** a la vez, cada una con sus cinco trazos
-independientes.
+It tracks up to **two hands** at once, each with its own five independent
+strokes.
 
-### Atajos de teclado
+### Keyboard shortcuts
 
-| Tecla | Acción |
+| Key | Action |
 | --- | --- |
-| `C` | Limpiar el lienzo |
-| `M` | Efecto espejo |
-| `F` | Pantalla completa |
-| `H` | Ocultar o mostrar la interfaz |
-| `S` | Guardar una foto PNG |
-| `R` | Empezar o parar la grabación |
-| `Espacio` | Congelar (desactiva el desvanecimiento) |
-| `1` `2` `3` | Cambiar de modo |
+| `C` | Clear the canvas |
+| `M` | Mirror effect |
+| `B` | Blur the background |
+| `F` | Fullscreen |
+| `H` | Hide or show the interface |
+| `S` | Save a PNG snapshot |
+| `R` | Start or stop recording |
+| `Space` | Freeze (turns fading off) |
+| `1` `2` `3` | Switch mode |
 
-La interfaz se esconde sola a los 4 segundos de inactividad — útil si lo
-proyectas.
-
----
-
-## Ajustes
-
-En el panel de la rueda dentada:
-
-- **Desvanecimiento** — cuánto vive cada trazo, de 0.5 a 20 s.
-- **Grosor** y **Resplandor** del pincel.
-- **Suavizado** — de *crudo* (reactivo, con algo de temblor) a *alto* (muy
-  suave, con un pelín de retardo).
-- **Opacidad del vídeo** — bájala a 0 para dibujar sobre negro puro.
-- **Espejo**, **Chispas** en la punta y **Cola fina** (el trazo adelgaza hacia
-  el final).
-- **Calidad** — Alta / Media / Baja. Baja el nivel si te faltan FPS: reduce la
-  resolución interna y el número de capas del resplandor.
-- **Cámara** — selector, por si tienes más de una.
-- **Paleta** — Neón, Fuego, Hielo, Arcoíris o un color por dedo a tu gusto.
-
-Todo se guarda en `localStorage`, así que la próxima vez arranca como lo
-dejaste.
-
-### Congelar
-
-Con **❄ Congelar** el trazo deja de desvanecerse y el lienzo se comporta como
-una pizarra: útil para escribir una palabra entera o dibujar algo con calma.
-
-### Foto y vídeo
-
-- **📷** guarda un PNG.
-- **⏺** graba un WebM y lo descarga al parar.
-
-Ambos exportan lo mismo que ves —vídeo de fondo y trazos ya compuestos, y con
-el espejo aplicado en el sentido correcto— porque todo se pinta sobre un único
-canvas.
+The interface hides itself after 4 seconds of inactivity — handy if you're
+projecting it.
 
 ---
 
-## Cómo funciona
+## Settings
 
-- **Detección:** [`@mediapipe/tasks-vision`][tv] (`HandLandmarker`), fijado a la
-  versión 0.10.14. Intenta usar la GPU y cae a CPU si no puede.
-- **Un solo canvas.** El vídeo y los trazos se pintan en el mismo `<canvas>`,
-  lo que hace que capturar una foto o grabar sea inmediato.
-- **Coordenadas.** Los puntos se guardan normalizados respecto a la cámara y se
-  proyectan en cada frame, así que redimensionar la ventana no deforma lo ya
-  dibujado. El mapeo replica el recorte `cover` del vídeo, de modo que el trazo
-  siempre cae justo bajo la yema.
-- **Suavizado.** Los landmarks de MediaPipe tiemblan unos píxeles por frame. Un
-  filtro [One Euro][oe] por yema limpia ese ruido cuando la mano está quieta
-  sin añadir retardo cuando se mueve rápido.
-- **Resplandor.** En lugar de `shadowBlur` —carísimo sobre trazos largos— el
-  brillo se construye con varias pasadas de distinto grosor y opacidad en modo
-  `lighter`. Además, los cruces de trazos suman luz en vez de ensuciarse.
-- **Desvanecimiento.** Cada trazo se reparte en bandas por antigüedad y cada
-  banda se dibuja con su propia opacidad y grosor. Así la cola se disuelve de
-  verdad, con un puñado de llamadas de dibujo en vez de una por segmento.
-- **Gestos.** Un dedo cuenta como estirado si la punta está más lejos de la
-  muñeca que su nudillo medio; medirlo así funciona con la mano girada, cosa
-  que no ocurre comparando alturas. Las dos manos se distinguen por la etiqueta
-  de lateralidad de MediaPipe, no por su posición en el array, que cambia de un
-  frame a otro.
+In the gear panel:
+
+- **Fade** — how long each stroke lives, from 0.5 to 20 s.
+- **Thickness** and **Glow** of the brush.
+- **Smoothing** — from *raw* (responsive, slightly jittery) to *high* (very
+  smooth, with a touch of lag).
+- **Video opacity** — set it to 0 to draw on pure black.
+- **Mirror**, **Sparks** at the fingertip, **Taper** (the stroke thins toward
+  its tail) and **Blur BG** (blurs the camera background so the strokes stand
+  out).
+- **Quality** — High / Medium / Low. Lower it if you're short on FPS: it
+  reduces the internal resolution and the number of glow layers.
+- **Camera** — a selector, in case you have more than one.
+- **Palette** — Neon, Fire, Ice, Rainbow, or a custom color per finger.
+
+Everything is saved to `localStorage`, so next time it starts the way you left
+it.
+
+### Freeze
+
+With **❄ Freeze** strokes stop fading and the canvas behaves like a
+whiteboard: useful for writing a whole word or drawing something carefully.
+
+### Photo and video
+
+- **📷** saves a PNG.
+- **⏺** records a WebM and downloads it when you stop.
+
+Both export exactly what you see — background video and strokes already
+composited, with the mirror applied the right way — because everything is
+painted onto a single canvas.
+
+---
+
+## How it works
+
+- **Detection:** [`@mediapipe/tasks-vision`][tv] (`HandLandmarker`), pinned to
+  version 0.10.14. It tries the GPU and falls back to the CPU if it can't.
+- **One canvas.** The video and the strokes are painted onto the same
+  `<canvas>`, which makes taking a photo or recording trivial.
+- **Coordinates.** Points are stored normalized to the camera frame and
+  projected every frame, so resizing the window doesn't distort what's already
+  drawn. The mapping replicates the video's `cover` crop, so the stroke always
+  lands right under the fingertip.
+- **Smoothing.** MediaPipe landmarks jitter a few pixels per frame. A
+  [One Euro][oe] filter per fingertip removes that noise while the hand is
+  still without adding lag when it moves fast.
+- **Glow.** Instead of `shadowBlur` — very expensive on long strokes — the glow
+  is built from several passes of varying width and opacity in `lighter` mode.
+  As a bonus, crossing strokes add light instead of getting muddy.
+- **Fading.** Each stroke is split into bands by age, and each band is drawn
+  with its own opacity and width. The tail truly dissolves, with a handful of
+  draw calls instead of one per segment.
+- **Background blur.** The video frame is shrunk onto a small offscreen canvas,
+  blurred there and stretched back up, which is far cheaper than blurring at
+  full resolution. Browsers without `ctx.filter` get a soft look from the
+  downscale alone.
+- **Gestures.** A finger counts as extended if its tip is farther from the
+  wrist than its middle knuckle; measuring it this way works with the hand
+  rotated, which comparing heights doesn't. The two hands are told apart by
+  MediaPipe's handedness label, not by their position in the array, which
+  changes from frame to frame.
 
 [tv]: https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/web_js
 [oe]: https://gery.casiez.net/1euro/
 
 ---
 
-## Notas y limitaciones
+## Notes and limitations
 
-- Los umbrales de los gestos (cuándo un dedo cuenta como estirado, cuándo un
-  pellizco cuenta como cerrado) son valores por defecto razonables, pero puede
-  que quieras afinarlos: están en `isExtended()` e `isPinching()`.
-- Necesita luz decente. A contraluz o en penumbra la detección se vuelve
-  intermitente.
-- La grabación produce WebM, que Safari no siempre reproduce de forma nativa.
-- El modelo y el runtime se cargan desde jsDelivr y Google Storage. Si lo
-  quieres offline o en un kiosco sin red, descarga esos archivos y cambia las
-  constantes `VISION_WASM` y `MODEL_URL`.
+- The gesture thresholds (when a finger counts as extended, when a pinch counts
+  as closed) are reasonable defaults, but you may want to tune them: they live
+  in `isExtended()` and `isPinching()`.
+- It needs decent lighting. Backlit or in dim light, detection becomes
+  intermittent.
+- Recording produces WebM, which Safari doesn't always play natively.
+- The model and runtime are loaded from jsDelivr and Google Storage. If you
+  want it offline or on a kiosk without network access, download those files
+  and change the `VISION_WASM` and `MODEL_URL` constants.

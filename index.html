@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -290,79 +290,80 @@
         <span class="brand">✨ MAGIC DRAW</span>
 
         <div class="seg" id="modeSeg">
-            <button data-mode="all" title="Dibujan todos los dedos estirados (1)">5 Dedos</button>
-            <button data-mode="index" title="Solo el índice (2)">Índice</button>
-            <button data-mode="pinch" title="Dibuja al juntar pulgar e índice (3)">Pellizco</button>
+            <button data-mode="all" title="Every extended finger draws (1)">5 Fingers</button>
+            <button data-mode="index" title="Index finger only (2)">Index</button>
+            <button data-mode="pinch" title="Draw by pinching thumb and index (3)">Pinch</button>
         </div>
 
         <div class="spacer"></div>
 
-        <button id="btnFreeze" title="Congelar el lienzo, sin desvanecimiento (Espacio)">❄ Congelar</button>
-        <button id="btnClear" class="danger" title="Limpiar (C)">Limpiar</button>
-        <button id="btnShot" title="Guardar PNG (S)">📷</button>
-        <button id="btnRec" title="Grabar vídeo (R)">⏺</button>
-        <button id="btnFull" title="Pantalla completa (F)">⛶</button>
-        <button id="btnPanel" title="Ajustes">⚙</button>
+        <button id="btnFreeze" title="Freeze the canvas, no fading (Space)">❄ Freeze</button>
+        <button id="btnClear" class="danger" title="Clear (C)">Clear</button>
+        <button id="btnShot" title="Save PNG (S)">📷</button>
+        <button id="btnRec" title="Record video (R)">⏺</button>
+        <button id="btnFull" title="Fullscreen (F)">⛶</button>
+        <button id="btnPanel" title="Settings">⚙</button>
     </div>
 
     <div id="panel">
         <div class="row">
-            <div class="lbl"><span>Desvanecimiento</span><b id="vFade">5.0 s</b></div>
+            <div class="lbl"><span>Fade</span><b id="vFade">5.0 s</b></div>
             <input type="range" id="fade" min="0.5" max="20" step="0.5" value="5">
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Grosor</span><b id="vBrush">8</b></div>
+            <div class="lbl"><span>Thickness</span><b id="vBrush">8</b></div>
             <input type="range" id="brush" min="2" max="26" step="1" value="8">
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Resplandor</span><b id="vGlow">100%</b></div>
+            <div class="lbl"><span>Glow</span><b id="vGlow">100%</b></div>
             <input type="range" id="glow" min="0" max="2" step="0.05" value="1">
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Suavizado</span><b id="vSmooth">medio</b></div>
+            <div class="lbl"><span>Smoothing</span><b id="vSmooth">medium</b></div>
             <input type="range" id="smooth" min="0" max="100" step="5" value="55">
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Opacidad del vídeo</span><b id="vVid">40%</b></div>
+            <div class="lbl"><span>Video opacity</span><b id="vVid">40%</b></div>
             <input type="range" id="vid" min="0" max="100" step="5" value="40">
         </div>
 
         <div class="sep"></div>
 
         <div class="toggles">
-            <button id="btnMirror" title="Efecto espejo (M)">Espejo</button>
-            <button id="btnSparks" title="Chispas en la punta">Chispas</button>
-            <button id="btnTaper" title="El trazo adelgaza en la cola">Cola fina</button>
+            <button id="btnMirror" title="Mirror effect (M)">Mirror</button>
+            <button id="btnSparks" title="Sparks at the fingertip">Sparks</button>
+            <button id="btnTaper" title="The stroke thins toward its tail">Taper</button>
+            <button id="btnBlur" title="Blur the camera background (B)">Blur BG</button>
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Calidad</span></div>
+            <div class="lbl"><span>Quality</span></div>
             <select id="quality">
-                <option value="high">Alta</option>
-                <option value="medium">Media</option>
-                <option value="low">Baja (más FPS)</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low (more FPS)</option>
             </select>
         </div>
 
         <div class="row">
-            <div class="lbl"><span>Cámara</span></div>
-            <select id="camSel"><option>Cámara predeterminada</option></select>
+            <div class="lbl"><span>Camera</span></div>
+            <select id="camSel"><option>Default camera</option></select>
         </div>
 
         <div class="sep"></div>
 
         <div class="row">
-            <div class="lbl"><span>Paleta</span></div>
+            <div class="lbl"><span>Palette</span></div>
             <select id="palette">
-                <option value="neon">Neón</option>
-                <option value="fire">Fuego</option>
-                <option value="ice">Hielo</option>
-                <option value="rainbow">Arcoíris</option>
-                <option value="custom">Personalizada</option>
+                <option value="neon">Neon</option>
+                <option value="fire">Fire</option>
+                <option value="ice">Ice</option>
+                <option value="rainbow">Rainbow</option>
+                <option value="custom">Custom</option>
             </select>
         </div>
 
@@ -370,24 +371,24 @@
 
         <div class="sep"></div>
         <div style="font-size:11px;line-height:1.7;color:rgba(255,255,255,.45)">
-            <b style="color:rgba(255,255,255,.7)">Atajos</b><br>
-            C limpiar · M espejo · F pantalla completa<br>
-            H ocultar interfaz · S foto · R grabar<br>
-            Espacio congelar · 1/2/3 modo<br>
-            <b style="color:rgba(255,255,255,.7)">Gesto:</b> cierra el puño para borrar
+            <b style="color:rgba(255,255,255,.7)">Shortcuts</b><br>
+            C clear · M mirror · F fullscreen · B blur<br>
+            H hide UI · S photo · R record<br>
+            Space freeze · 1/2/3 mode<br>
+            <b style="color:rgba(255,255,255,.7)">Gesture:</b> make a fist to clear
         </div>
     </div>
 
     <div id="recDot"><i></i><span id="recTime">0:00</span></div>
     <div id="hud"></div>
-    <div id="hint">Abre la mano frente a la cámara para dibujar</div>
+    <div id="hint">Open your hand in front of the camera to draw</div>
     <div id="toast"></div>
 </div>
 
 <div id="loading">
     <div class="spin"></div>
-    <div id="loadMsg">Despertando la magia…</div>
-    <small id="loadSub">Cargando el modelo de detección de manos</small>
+    <div id="loadMsg">Waking up the magic…</div>
+    <small id="loadSub">Loading the hand detection model</small>
 </div>
 
 <script type="module">
@@ -413,6 +414,7 @@ const DEFAULTS = {
     glow: 1,
     smooth: 55,
     videoOpacity: 0.4,
+    blurBg: false,
     mirror: true,
     sparkles: true,
     taper: true,
@@ -447,7 +449,7 @@ const QUALITY = {
 
 // Puntas de dedo en el modelo de MediaPipe.
 const TIPS = [4, 8, 12, 16, 20];
-const FINGER_NAMES = ['Pulgar', 'Índice', 'Medio', 'Anular', 'Meñique'];
+const FINGER_NAMES = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky'];
 
 const MIN_STEP = 0.0035;   // distancia mínima (normalizada) entre puntos
 const MAX_POINTS = 3000;   // tope por trazo en modo congelado
@@ -660,7 +662,7 @@ function consume(now) {
             else if (!fistFired && now - fistSince > 350) {
                 clearAll();
                 fistFired = true;
-                toast('✊ Lienzo limpio');
+                toast('✊ Canvas cleared');
             }
             continue;
         }
@@ -725,15 +727,13 @@ function frame(now) {
     // --- Fondo de vídeo ---
     if (CFG.videoOpacity > 0 && video.readyState >= 2) {
         ctx.globalAlpha = CFG.videoOpacity;
+        ctx.save();
         if (CFG.mirror) {
-            ctx.save();
             ctx.translate(W, 0);
             ctx.scale(-1, 1);
-            ctx.drawImage(video, fit.ox, fit.oy, fit.rw, fit.rh);
-            ctx.restore();
-        } else {
-            ctx.drawImage(video, fit.ox, fit.oy, fit.rw, fit.rh);
         }
+        drawVideo();
+        ctx.restore();
         ctx.globalAlpha = 1;
     }
 
@@ -760,6 +760,37 @@ function frame(now) {
         frames = 0; fpsTime = now;
         updateHud();
     }
+}
+
+/* Blurred background: the frame is shrunk onto a small canvas, blurred
+   there (cheap at that size) and stretched back up. Without `ctx.filter`
+   (older Safari) the shrink is stronger and bilinear upscaling alone gives
+   the soft look. */
+const BLUR_PX = 14;
+const BLUR_SCALE = 4;
+const blurCanvas = document.createElement('canvas');
+const blurCtx = blurCanvas.getContext('2d');
+const hasFilter = 'filter' in blurCtx;
+
+function drawVideo() {
+    if (!CFG.blurBg) {
+        ctx.drawImage(video, fit.ox, fit.oy, fit.rw, fit.rh);
+        return;
+    }
+    const k = hasFilter ? BLUR_SCALE : BLUR_PX;
+    const bw = Math.max(1, Math.round(fit.rw / k));
+    const bh = Math.max(1, Math.round(fit.rh / k));
+    if (blurCanvas.width !== bw || blurCanvas.height !== bh) {
+        blurCanvas.width = bw;
+        blurCanvas.height = bh;
+    }
+    if (hasFilter) blurCtx.filter = `blur(${BLUR_PX / BLUR_SCALE}px)`;
+    // Bleed past the edges so the blur doesn't pull in a dark border.
+    const m = hasFilter ? Math.ceil(BLUR_PX / BLUR_SCALE) * 2 : 0;
+    blurCtx.drawImage(video, -m, -m, bw + 2 * m, bh + 2 * m);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(blurCanvas, fit.ox, fit.oy, fit.rw, fit.rh);
 }
 
 function prune(trail, now, fade) {
@@ -870,7 +901,7 @@ async function listCameras() {
         devs.forEach((d, i) => {
             const o = document.createElement('option');
             o.value = d.deviceId;
-            o.textContent = d.label || `Cámara ${i + 1}`;
+            o.textContent = d.label || `Camera ${i + 1}`;
             sel.appendChild(o);
         });
         if (CFG.deviceId && devs.some(d => d.deviceId === CFG.deviceId)) sel.value = CFG.deviceId;
@@ -889,25 +920,25 @@ function fail(msg, sub) {
 
 async function boot() {
     if (!window.isSecureContext) {
-        fail('Se requiere una conexión segura',
-             'La cámara solo funciona en https:// o en http://localhost. Sirve el archivo con un servidor local.');
+        fail('A secure connection is required',
+             'The camera only works on https:// or http://localhost. Serve the file with a local server.');
         return;
     }
     if (!navigator.mediaDevices?.getUserMedia) {
-        fail('Este navegador no soporta la cámara', 'Prueba con Chrome, Edge o Safari actualizados.');
+        fail('This browser does not support the camera', 'Try an up-to-date Chrome, Edge or Safari.');
         return;
     }
 
     try {
-        $('loadSub').textContent = 'Pidiendo permiso de cámara…';
+        $('loadSub').textContent = 'Requesting camera permission…';
         await startCamera(CFG.deviceId);
     } catch (e) {
         const map = {
-            NotAllowedError: ['Permiso de cámara denegado', 'Permite el acceso desde el icono de la barra de direcciones y recarga.'],
-            NotFoundError:   ['No se encontró ninguna cámara', 'Conecta una cámara y recarga la página.'],
-            NotReadableError:['La cámara está en uso', 'Otra aplicación la está ocupando. Ciérrala y recarga.'],
+            NotAllowedError: ['Camera permission denied', 'Allow access from the icon in the address bar and reload.'],
+            NotFoundError:   ['No camera found', 'Connect a camera and reload the page.'],
+            NotReadableError:['The camera is in use', 'Another application is using it. Close it and reload.'],
         };
-        const [m, s] = map[e.name] || ['No se pudo abrir la cámara', e.message];
+        const [m, s] = map[e.name] || ['Could not open the camera', e.message];
         fail(m, s);
         return;
     }
@@ -915,7 +946,7 @@ async function boot() {
     listCameras();
 
     try {
-        $('loadSub').textContent = 'Cargando el modelo de detección de manos…';
+        $('loadSub').textContent = 'Loading the hand detection model…';
         const vision = await FilesetResolver.forVisionTasks(VISION_WASM);
         const opts = (delegate) => ({
             baseOptions: { modelAssetPath: MODEL_URL, delegate },
@@ -931,7 +962,7 @@ async function boot() {
             landmarker = await HandLandmarker.createFromOptions(vision, opts('CPU'));
         }
     } catch (e) {
-        fail('No se pudo cargar el modelo', 'Revisa tu conexión a internet. ' + (e.message || ''));
+        fail('Could not load the model', 'Check your internet connection. ' + (e.message || ''));
         return;
     }
 
@@ -952,15 +983,15 @@ function toast(msg) {
 function updateHud() {
     const hands = latest.hands.length;
     $('hud').innerHTML =
-        `${fps} fps · ${hands} mano${hands === 1 ? '' : 's'} · ` +
-        `${[...trails.values()].reduce((n, t) => n + t.pts.length, 0)} puntos`;
+        `${fps} fps · ${hands} hand${hands === 1 ? '' : 's'} · ` +
+        `${[...trails.values()].reduce((n, t) => n + t.pts.length, 0)} points`;
 
     const hints = {
-        all: 'Estira los dedos para dibujar · cierra el puño para borrar',
-        index: 'Dibuja con el índice · cierra el puño para borrar',
-        pinch: 'Junta pulgar e índice para dibujar',
+        all: 'Extend your fingers to draw · make a fist to clear',
+        index: 'Draw with your index finger · make a fist to clear',
+        pinch: 'Pinch thumb and index together to draw',
     };
-    $('hint').textContent = hands ? hints[CFG.mode] : 'Muestra la mano frente a la cámara';
+    $('hint').textContent = hands ? hints[CFG.mode] : 'Show your hand to the camera';
 }
 
 function syncUI() {
@@ -975,7 +1006,7 @@ function syncUI() {
     $('vGlow').textContent = Math.round(CFG.glow * 100) + '%';
 
     $('smooth').value = CFG.smooth;
-    $('vSmooth').textContent = CFG.smooth < 25 ? 'crudo' : CFG.smooth < 60 ? 'medio' : 'alto';
+    $('vSmooth').textContent = CFG.smooth < 25 ? 'raw' : CFG.smooth < 60 ? 'medium' : 'high';
 
     $('vid').value = CFG.videoOpacity * 100;
     $('vVid').textContent = Math.round(CFG.videoOpacity * 100) + '%';
@@ -986,6 +1017,7 @@ function syncUI() {
     $('btnMirror').classList.toggle('on', CFG.mirror);
     $('btnSparks').classList.toggle('on', CFG.sparkles);
     $('btnTaper').classList.toggle('on', CFG.taper);
+    $('btnBlur').classList.toggle('on', CFG.blurBg);
     $('btnFreeze').classList.toggle('on', CFG.freeze);
 
     [...$('modeSeg').children].forEach(b =>
@@ -1032,7 +1064,7 @@ $('palette').onchange = e => {
 $('camSel').onchange = async e => {
     CFG.deviceId = e.target.value;
     save();
-    try { await startCamera(CFG.deviceId); } catch { toast('No se pudo cambiar de cámara'); }
+    try { await startCamera(CFG.deviceId); } catch { toast('Could not switch camera'); }
 };
 
 // Botones
@@ -1040,14 +1072,15 @@ $('modeSeg').onclick = e => {
     const b = e.target.closest('button');
     if (b) { CFG.mode = b.dataset.mode; syncUI(); }
 };
-$('btnClear').onclick  = () => { clearAll(); toast('Lienzo limpio'); };
+$('btnClear').onclick  = () => { clearAll(); toast('Canvas cleared'); };
 $('btnMirror').onclick = () => { CFG.mirror = !CFG.mirror; syncUI(); };
 $('btnSparks').onclick = () => { CFG.sparkles = !CFG.sparkles; syncUI(); };
 $('btnTaper').onclick  = () => { CFG.taper = !CFG.taper; syncUI(); };
+$('btnBlur').onclick   = () => { CFG.blurBg = !CFG.blurBg; syncUI(); };
 $('btnFreeze').onclick = () => {
     CFG.freeze = !CFG.freeze;
     syncUI();
-    toast(CFG.freeze ? '❄ Lienzo congelado' : 'Desvanecimiento activo');
+    toast(CFG.freeze ? '❄ Canvas frozen' : 'Fading on');
 };
 $('btnPanel').onclick = () => {
     const open = $('panel').classList.toggle('open');
@@ -1061,9 +1094,9 @@ $('btnFull').onclick = () => {
 /* --- Foto --- */
 $('btnShot').onclick = () => {
     stage.toBlob(blob => {
-        if (!blob) return toast('No se pudo guardar');
+        if (!blob) return toast('Could not save');
         download(blob, `magicdraw-${stamp()}.png`);
-        toast('📷 Foto guardada');
+        toast('📷 Photo saved');
     }, 'image/png');
 };
 
@@ -1073,20 +1106,20 @@ let recorder = null, chunks = [], recStart = 0, recTimer = 0;
 $('btnRec').onclick = () => recorder ? stopRec() : startRec();
 
 function startRec() {
-    if (!window.MediaRecorder || !stage.captureStream) return toast('Grabación no soportada');
+    if (!window.MediaRecorder || !stage.captureStream) return toast('Recording not supported');
     const types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
     const mime = types.find(t => MediaRecorder.isTypeSupported(t));
-    if (!mime) return toast('Grabación no soportada');
+    if (!mime) return toast('Recording not supported');
 
     try {
         recorder = new MediaRecorder(stage.captureStream(30), { mimeType: mime, videoBitsPerSecond: 8e6 });
-    } catch { return toast('No se pudo iniciar la grabación'); }
+    } catch { return toast('Could not start recording'); }
 
     chunks = [];
     recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
     recorder.onstop = () => {
         download(new Blob(chunks, { type: mime }), `magicdraw-${stamp()}.webm`);
-        toast('Vídeo guardado');
+        toast('Video saved');
     };
     recorder.start(1000);
 
@@ -1122,8 +1155,9 @@ const stamp = () => new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
 addEventListener('keydown', e => {
     if (e.target.matches('input, select')) return;
     const k = e.key.toLowerCase();
-    if (k === 'c') { clearAll(); toast('Lienzo limpio'); }
+    if (k === 'c') { clearAll(); toast('Canvas cleared'); }
     else if (k === 'm') $('btnMirror').click();
+    else if (k === 'b') $('btnBlur').click();
     else if (k === 'f') $('btnFull').click();
     else if (k === 's') $('btnShot').click();
     else if (k === 'r') $('btnRec').click();
