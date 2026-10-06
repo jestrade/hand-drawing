@@ -1,5 +1,7 @@
 # ✨ AR Magic Draw
 
+> for my daughter
+
 Draw in the air with your hands. The camera tracks the 21 landmarks of each
 hand with MediaPipe, and every fingertip leaves a neon trail that fades away on
 its own.
