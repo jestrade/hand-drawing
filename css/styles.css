@@ -1,0 +1,273 @@
+:root {
+    --accent: #00ffcc;
+    --panel: rgba(12, 14, 18, 0.72);
+    --border: rgba(255, 255, 255, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+}
+
+/* El escenario es un único canvas: video + trazos.
+   Así el snapshot y la grabación salen ya compuestos. */
+#stage {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+}
+
+#video { display: none; }
+
+/* ---------- Interfaz ---------- */
+
+#ui {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity .35s ease;
+}
+#ui.hidden { opacity: 0; }
+
+#topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    background: linear-gradient(to bottom, rgba(0,0,0,.75), rgba(0,0,0,0));
+    pointer-events: auto;
+}
+
+.brand {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 13px;
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(0,255,204,.6);
+    margin-right: 4px;
+    white-space: nowrap;
+}
+
+.spacer { flex: 1 1 auto; }
+
+button, select, .seg {
+    font-family: inherit;
+    font-size: 12px;
+    color: #fff;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+button {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: .4px;
+    transition: background .15s, border-color .15s, transform .1s;
+    white-space: nowrap;
+}
+button:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.3); }
+button:active { transform: scale(.96); }
+button.on {
+    background: rgba(0,255,204,.16);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+button.danger:hover { background: rgba(231,76,60,.28); border-color: #e74c3c; }
+button.rec { background: rgba(231,76,60,.28); border-color: #e74c3c; color: #ff8f85; }
+
+.seg { display: flex; padding: 3px; gap: 3px; }
+.seg button {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    backdrop-filter: none;
+}
+.seg button.on { background: rgba(0,255,204,.18); }
+
+select { padding: 7px 8px; cursor: pointer; max-width: 170px; }
+option { background: #14171c; }
+
+/* ---------- Panel de ajustes ---------- */
+
+#panel {
+    position: absolute;
+    top: 62px;
+    left: 14px;
+    width: 268px;
+    max-height: calc(100% - 90px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 14px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    pointer-events: auto;
+}
+#panel.open { display: flex; }
+#panel::-webkit-scrollbar { width: 6px; }
+#panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
+
+.row { display: flex; flex-direction: column; gap: 6px; }
+.row > .lbl {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,.6);
+}
+.lbl b { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+input[type="range"]:disabled { opacity: .35; cursor: not-allowed; }
+
+.sep { height: 1px; background: var(--border); }
+
+.toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.toggles button { flex: 1 1 auto; }
+
+.fingers { display: flex; flex-direction: column; gap: 6px; }
+.finger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,.75);
+}
+.finger input[type="color"] {
+    width: 34px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+}
+.finger .name { flex: 1; }
+
+/* ---------- Overlays ---------- */
+
+#hud {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255,255,255,.45);
+    letter-spacing: .5px;
+    line-height: 1.6;
+}
+#hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(0,255,204,.8);
+    text-shadow: 0 0 8px rgba(0,255,204,.5);
+    text-align: center;
+    padding: 0 12px;
+}
+
+#toast {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.9);
+    padding: 14px 26px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: rgba(0,0,0,.75);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    box-shadow: 0 0 24px rgba(0,255,204,.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+}
+#toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+#recDot {
+    position: absolute;
+    top: 62px;
+    right: 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6b5e;
+}
+#recDot.on { display: flex; }
+#recDot i {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e74c3c;
+    animation: pulse 1s infinite;
+}
+@keyframes pulse { 50% { opacity: .25; } }
+
+#loading {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 24px;
+    background: rgba(0,0,0,.9);
+    font-size: 17px;
+}
+#loading.gone { display: none; }
+#loading small { font-size: 13px; color: rgba(255,255,255,.5); max-width: 420px; line-height: 1.6; }
+#loading .err { color: #ff6b5e; }
+.spin {
+    width: 34px; height: 34px;
+    border: 3px solid rgba(0,255,204,.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 720px) {
+    .brand, #hud { display: none; }
+    #panel { width: calc(100% - 28px); }
+    button { padding: 7px 10px; }
+}

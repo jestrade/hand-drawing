@@ -6,8 +6,17 @@ its own.
 
 ![AR Magic Draw: neon trails drawn by each fingertip of an open hand](docs/demo.webp)
 
-Everything lives in a single file (`index.html`): no build step, no
-dependencies to install, no backend. The video never leaves your browser.
+Plain static files: no build step, no dependencies to install, no backend.
+The detection runtime and model are bundled in the repo, so it doesn't depend
+on any CDN and the video never leaves your browser.
+
+```
+index.html                      markup
+css/styles.css                  styles
+js/app.js                       application logic
+vendor/mediapipe/               @mediapipe/tasks-vision 0.10.14 (JS + WASM)
+models/hand_landmarker.task     hand landmark model (float16)
+```
 
 ---
 
@@ -26,9 +35,9 @@ Any alternative works too (`npx serve`, `php -S localhost:8000`, the VS Code
 Live Server extension…), as does any static host with HTTPS.
 
 **Requirements:** a modern browser with WebGL and `getUserMedia` (an
-up-to-date Chrome, Edge, Safari or Firefox) and a camera. The first load
-downloads the detection model (~8 MB) from the CDN, so it needs an internet
-connection.
+up-to-date Chrome, Edge, Safari or Firefox) and a camera. No internet
+connection is needed: the runtime (~9 MB of WASM) and the model (~8 MB) are
+served by the same server as the app.
 
 ---
 
@@ -105,8 +114,9 @@ painted onto a single canvas.
 
 ## How it works
 
-- **Detection:** [`@mediapipe/tasks-vision`][tv] (`HandLandmarker`), pinned to
-  version 0.10.14. It tries the GPU and falls back to the CPU if it can't.
+- **Detection:** [`@mediapipe/tasks-vision`][tv] (`HandLandmarker`), version
+  0.10.14, vendored in `vendor/mediapipe/`. It tries the GPU and falls back to
+  the CPU if it can't.
 - **One canvas.** The video and the strokes are painted onto the same
   `<canvas>`, which makes taking a photo or recording trivial.
 - **Coordinates.** Points are stored normalized to the camera frame and
@@ -141,10 +151,12 @@ painted onto a single canvas.
 
 - The gesture thresholds (when a finger counts as extended, when a pinch counts
   as closed) are reasonable defaults, but you may want to tune them: they live
-  in `isExtended()` and `isPinching()`.
+  in `isExtended()` and `isPinching()` in `js/app.js`.
 - It needs decent lighting. Backlit or in dim light, detection becomes
   intermittent.
 - Recording produces WebM, which Safari doesn't always play natively.
-- The model and runtime are loaded from jsDelivr and Google Storage. If you
-  want it offline or on a kiosk without network access, download those files
-  and change the `VISION_WASM` and `MODEL_URL` constants.
+- Runtime and model are self-hosted, so it works offline or on a kiosk
+  without network access. To upgrade MediaPipe, replace `vendor/mediapipe/`
+  with the `vision_bundle.mjs` and `wasm/` folder from the new
+  `@mediapipe/tasks-vision` npm package, and the model with a newer
+  `hand_landmarker.task` from Google's MediaPipe model storage.
